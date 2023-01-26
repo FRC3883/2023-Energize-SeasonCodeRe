@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.I2C.Port;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +24,6 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveModule(
           DriveConstants.kFrontLeftDriveMotorPort,
           DriveConstants.kFrontLeftTurningMotorPort,
-          DriveConstants.kFrontLeftDriveEncoderPorts,
-          DriveConstants.kFrontLeftTurningEncoderPorts,
           DriveConstants.kFrontLeftDriveEncoderReversed,
           DriveConstants.kFrontLeftTurningEncoderReversed);
 
@@ -30,8 +31,6 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveModule(
           DriveConstants.kRearLeftDriveMotorPort,
           DriveConstants.kRearLeftTurningMotorPort,
-          DriveConstants.kRearLeftDriveEncoderPorts,
-          DriveConstants.kRearLeftTurningEncoderPorts,
           DriveConstants.kRearLeftDriveEncoderReversed,
           DriveConstants.kRearLeftTurningEncoderReversed);
 
@@ -39,8 +38,6 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveModule(
           DriveConstants.kFrontRightDriveMotorPort,
           DriveConstants.kFrontRightTurningMotorPort,
-          DriveConstants.kFrontRightDriveEncoderPorts,
-          DriveConstants.kFrontRightTurningEncoderPorts,
           DriveConstants.kFrontRightDriveEncoderReversed,
           DriveConstants.kFrontRightTurningEncoderReversed);
 
@@ -48,13 +45,11 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveModule(
           DriveConstants.kRearRightDriveMotorPort,
           DriveConstants.kRearRightTurningMotorPort,
-          DriveConstants.kRearRightDriveEncoderPorts,
-          DriveConstants.kRearRightTurningEncoderPorts,
           DriveConstants.kRearRightDriveEncoderReversed,
           DriveConstants.kRearRightTurningEncoderReversed);
 
   // The gyro sensor
-  private final Gyro m_gyro = new ADXRS450_Gyro();
+  private final AHRS m_gyro = new AHRS(Port.kMXP);
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
